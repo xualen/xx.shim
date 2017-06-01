@@ -9,8 +9,7 @@ function Set(exp, value) {
 Set.prototype = {
     update: function() {
         if (type(this.value, 'Array')) {
-            store[this.exp] = JSON.parse(JSON.stringify(this.value));
-            obsArr(store, this.exp, dep);
+            store[this.exp] = deepCopy(this.value);
             dep.emit(this.exp, store);
         } else {
             store[this.exp] = this.value;
@@ -23,11 +22,11 @@ function set(exp, value) {
     return new Set(exp, value);
 }
 
-function obsArr(o, p, dep) {
-    var last = JSON.parse(JSON.stringify(o[p]));
-    var arr = o[p];
-    var proto = Array.prototype;
-    if (type(last, 'Array')) {
+function obsArr(o, p, exp) {
+    if (type(o[p], 'Array')) {
+        var last = JSON.parse(JSON.stringify(o[p]));
+        var arr = o[p];
+        var proto = Array.prototype;
         var method = ['push', 'pop', 'unshift', 'shift', 'sort', 'reverse', 'splice'];
         for (var i = method.length; i--;) {;
             ! function(i) {
@@ -36,7 +35,7 @@ function obsArr(o, p, dep) {
                     proto[m].apply(arr, arguments);
                     var cur = o[p];
                     (toStr(cur) != toStr(last)) && ! function() {
-                        dep.emit(p, o, m);
+                        dep.emit(exp, store, m);
                     }();
                 }
             }(i);
@@ -45,15 +44,27 @@ function obsArr(o, p, dep) {
             o[p] = [];
             var cur = o[p];
             (toStr(cur) != toStr(last)) && ! function() {
-                dep.emit(p, o);
+                dep.emit(exp, store);
             }();
         }
         arr.set = function(index, value) {
             [].splice.call(arr, index, 1, value);
             var cur = o[p];
             (toStr(cur) != toStr(last)) && ! function() {
-                dep.emit(p, o);
+                dep.emit(exp, store);
             }();
         }
+        loopArr(o[p], exp);
+    }
+}
+
+function loopArr(o, exp) {
+    for (var p in o) {
+        if (typeof exp == 'undefined') {
+            var exp = p;
+        } else {
+            var exp = exp;
+        }
+        obsArr(o, p, exp);
     }
 }

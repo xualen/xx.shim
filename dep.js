@@ -14,8 +14,11 @@ Dep.prototype = {
     },
     gg: function() {
         var me = this;
-        if (typeof me.exp['$el'] != 'undefined') me.exp['$el'] = [];
-        if (typeof me.exp['$index'] != 'undefined') me.exp['$index'] = [];
+        for (var p in me.exp) {
+            if (p.indexOf('$el') != -1 || p.indexOf('$index') != -1) {
+                me.exp[p] = [];
+            }
+        }
     },
     emit: function(exp) {
         var me = this;

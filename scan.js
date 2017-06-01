@@ -73,6 +73,7 @@ function parseNode(node, store) {
 
 var scanTimer = setTimeout(function() {
     scan();
+    loopArr(store);
     clearTimeout(scanTimer);
     scanTimer = null;
 })

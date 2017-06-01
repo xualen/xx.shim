@@ -27,6 +27,9 @@ function toStr(obj) {
     return arr.join("");
 }
 
+function deepCopy(o) {
+    return eval("(" + toStr(o) + ")");
+}
 
 function isFalse(p) {
     return typeof p == 'undefined';
@@ -65,4 +68,10 @@ function create(obj) {
     function O() {}
     O.prototype = obj;
     return new O();
+}
+
+function compute(o, p) {
+    with(o) {
+        return eval(p);
+    }
 }
