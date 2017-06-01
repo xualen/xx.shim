@@ -1,4 +1,4 @@
-function scan() {
+window.scan = function() {
     var body = document.body;
     var frag = nodeToFrag(body);
     parse(frag, store);
@@ -6,7 +6,7 @@ function scan() {
 }
 
 function nodeToFrag(node) {
-    var childs = [].slice.call(node.childNodes);
+    var childs = [].concat.apply([], node.childNodes);
     var frag = document.createDocumentFragment();
     for (var i = 0; i < childs.length; i++) {
         frag.appendChild(childs[i]);
@@ -21,7 +21,7 @@ function parseMe(node, store) {
 }
 
 function parse(node, store) {
-    var childs = [].slice.call(node.childNodes);
+    var childs = [].concat.apply([], node.childNodes);
     if (!childs) return;
     for (var i = 0; i < childs.length; i++) {
         var child = childs[i];
@@ -50,7 +50,7 @@ function parseText(node, store) {
 }
 
 function parseNode(node, store) {
-    var attrs = [].slice.call(node.attributes);
+    var attrs = [].concat.apply([], node.attributes);
     var temp = [];
     for (var i = 0; i < attrs.length; i++) {
         var attr = attrs[i];
