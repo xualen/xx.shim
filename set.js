@@ -34,25 +34,25 @@
                  arr[m] = function() {
                      proto[m].apply(arr, arguments);
                      var cur = o[p];
-                     (toStr(cur) != toStr(last)) && ! function() {
+                     if (toStr(cur) != toStr(last)) {
                          dep.emit(exp, store, m);
-                     }();
+                     };
                  }
              }(i);
          }
          arr.clear = function() {
-             o[p] = [];
+             o[p].length = 0;
              var cur = o[p];
-             (toStr(cur) != toStr(last)) && ! function() {
+             if (toStr(cur) != toStr(last)) {
                  dep.emit(exp, store);
-             }();
+             };
          }
          arr.set = function(index, value) {
              [].splice.call(arr, index, 1, value);
              var cur = o[p];
-             (toStr(cur) != toStr(last)) && ! function() {
+             if (toStr(cur) != toStr(last)) {
                  dep.emit(exp, store);
-             }();
+             };
          }
          loopArr(o[p], exp);
      }
@@ -61,10 +61,10 @@
  function loopArr(o, exp) {
      for (var p in o) {
          if (typeof exp == 'undefined') {
-             var exp = p;
+             var exps = p;
          } else {
-             var exp = exp;
+             var exps = exp;
          }
-         obsArr(o, p, exp);
+         obsArr(o, p, exps);
      }
  }

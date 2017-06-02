@@ -18,7 +18,7 @@
          dep.on(exp, go);
          go(store);
      },
-     xfor: function(node, store, method) {
+     xfor: function(node, store) {
          var start = document.createComment("start");
          var end = document.createComment("end");
          var parent = node.parentNode;
