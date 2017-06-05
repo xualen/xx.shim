@@ -24,7 +24,6 @@
 
  function obsArr(o, p, exp) {
      if (type(o[p], 'Array')) {
-         var last = JSON.parse(JSON.stringify(o[p]));
          var arr = o[p];
          var proto = Array.prototype;
          var method = ['push', 'pop', 'unshift', 'shift', 'sort', 'reverse', 'splice'];
@@ -34,25 +33,19 @@
                  arr[m] = function() {
                      proto[m].apply(arr, arguments);
                      var cur = o[p];
-                     if (toStr(cur) != toStr(last)) {
-                         dep.emit(exp, store, m);
-                     };
+                     dep.emit(exp, store, m);
                  }
              }(i);
          }
          arr.clear = function() {
              o[p].length = 0;
              var cur = o[p];
-             if (toStr(cur) != toStr(last)) {
-                 dep.emit(exp, store);
-             };
+             dep.emit(exp, store);
          }
          arr.set = function(index, value) {
              [].splice.call(arr, index, 1, value);
              var cur = o[p];
-             if (toStr(cur) != toStr(last)) {
-                 dep.emit(exp, store);
-             };
+             dep.emit(exp, store);
          }
          loopArr(o[p], exp);
      }

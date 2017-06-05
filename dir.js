@@ -67,7 +67,7 @@
          for (i = 0; i < attrs.length; i++) {
              var attr = attrs[i];
              if (attr.name.indexOf('x-attr') != -1) {
-                 var attrName = attr.name.substr(attr.name.lastIndexOf('-') + 1);
+                 var attrName = attr.name.substr(attr.name.indexOf('attr-') + 5);
                  var exp = attr.value;
                  node.removeAttribute(attr.name);
                  var go = function(store) {

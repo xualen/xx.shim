@@ -71,9 +71,7 @@ function parseNode(node, store) {
     }
 }
 
-var scanTimer = setTimeout(function() {
+window.xxInit = function() {
     scan();
     loopArr(store);
-    clearTimeout(scanTimer);
-    scanTimer = null;
-})
+}
